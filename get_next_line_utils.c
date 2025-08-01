@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wsilveir <wsilveir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wini <wini@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 19:52:08 by wsilveir          #+#    #+#             */
-/*   Updated: 2025/07/31 18:50:35 by wsilveir         ###   ########.fr       */
+/*   Updated: 2025/08/01 14:25:24 by wini             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	*ft_read_error(char *buf, char *tmp_buf)
+{
+	free(buf);
+	free(tmp_buf);
+	return (NULL);
+}
 
 size_t	ft_strlen(const char *str)
 {

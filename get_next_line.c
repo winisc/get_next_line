@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wsilveir <wsilveir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: wini <wini@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 19:51:15 by wsilveir          #+#    #+#             */
-/*   Updated: 2025/07/31 21:16:43 by wsilveir         ###   ########.fr       */
+/*   Updated: 2025/08/01 14:26:12 by wini             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-static size_t	get_new_line(char *tmp_buffer)
+static int	get_new_line(char *tmp_buffer)
 {
 	int	i;
 
 	i = 0;
-	while(tmp_buffer[i])
+	while (tmp_buffer[i])
 	{
-		if(tmp_buffer[i] == '\n')
-			return (i); 
+		if (tmp_buffer[i] == '\n')
+			return (i);
 		i++;
 	}
 	return (-1);
@@ -29,9 +29,9 @@ static size_t	get_new_line(char *tmp_buffer)
 
 static char	*read_buffer_nl(int fd, char *tmp_buffer)
 {
-	char 	*rd_buffer;
+	char	*rd_buffer;
 	char	*tmp_storage;
-	size_t 	nl_pos;
+	int		nl_pos;
 	int		rd_bytes;
 
 	rd_buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
@@ -42,13 +42,9 @@ static char	*read_buffer_nl(int fd, char *tmp_buffer)
 	{
 		rd_bytes = read(fd, rd_buffer, BUFFER_SIZE);
 		if (rd_bytes == 0)
-			return (tmp_buffer);
-		if (rd_bytes < 0)
-		{
-			free(rd_buffer);
-			free(tmp_buffer);
-			return (NULL);
-		}
+			break ;
+		if (rd_bytes == -1)
+			return (ft_read_error(rd_buffer, tmp_buffer));
 		rd_buffer[rd_bytes] = 0;
 		tmp_storage = ft_strjoin(tmp_buffer, rd_buffer);
 		free(tmp_buffer);
@@ -59,26 +55,26 @@ static char	*read_buffer_nl(int fd, char *tmp_buffer)
 	return (tmp_buffer);
 }
 
-static char	*get_line(char *tmp_buffer, size_t nl_index)
+static char	*get_line(char *tmp_buffer, int nl_index)
 {
 	char	*nl_buffer;
 
 	if (nl_index < 0)
-		return(ft_strdup(tmp_buffer));
+		return (ft_strdup(tmp_buffer));
 	nl_buffer = (char *)malloc((nl_index + 2) * sizeof(char));
 	if (!nl_buffer)
 		return (NULL);
-	ft_strlcpy(nl_buffer, tm_buffer, i + 2);
+	ft_strlcpy(nl_buffer, tmp_buffer, nl_index + 2);
 	return (nl_buffer);
 }
 
-static char	*save_remainder_buffer(char *tmp_buffer, size_t nl_index)
+static char	*save_remainder_buffer(char *tmp_buffer, int nl_index)
 {
 	char	*str_remainder;
-	size_t	len;
+	int		len;
 
 	len = ft_strlen(tmp_buffer);
-	if (pos < 0 || pos == len - 1)
+	if (nl_index < 0 || nl_index == len - 1)
 	{
 		free(tmp_buffer);
 		return (NULL);
@@ -90,18 +86,19 @@ static char	*save_remainder_buffer(char *tmp_buffer, size_t nl_index)
 
 char	*get_next_line(int fd)
 {
-	static char *tmp_buffer;
-	size_t		nl_pos;
+	static char	*tmp_buffer;
+	int			nl_pos;
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE < 0)
 		return (NULL);
-	if (tmp_buffer == NULL)
+	if (!tmp_buffer)
 		tmp_buffer = ft_strdup("");
 	tmp_buffer = read_buffer_nl(fd, tmp_buffer);
 	if (!tmp_buffer || !tmp_buffer[0])
 	{
 		free(tmp_buffer);
+		tmp_buffer = NULL;
 		return (NULL);
 	}
 	nl_pos = get_new_line(tmp_buffer);
