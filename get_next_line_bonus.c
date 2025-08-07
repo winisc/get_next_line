@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wini <wini@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 19:51:15 by wsilveir          #+#    #+#             */
-/*   Updated: 2025/08/07 02:59:46 by wini             ###   ########.fr       */
+/*   Updated: 2025/08/07 02:59:42 by wini             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static int	get_new_line(char *tmp_buffer)
 {
@@ -85,23 +85,23 @@ static char	*save_remainder_buffer(char *tmp_buffer, int nl_index)
 
 char	*get_next_line(int fd)
 {
-	static char	*tmp_buffer;
+	static char	*tmp_buffer[4096];
 	int			nl_pos;
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!tmp_buffer)
-		tmp_buffer = ft_strdup("");
-	tmp_buffer = read_buffer_nl(fd, tmp_buffer);
-	if (!tmp_buffer || !tmp_buffer[0])
+	if (!tmp_buffer[fd])
+		tmp_buffer[fd] = ft_strdup("");
+	tmp_buffer[fd] = read_buffer_nl(fd, tmp_buffer[fd]);
+	if (!tmp_buffer[fd] || !tmp_buffer[fd][0])
 	{
-		free(tmp_buffer);
-		tmp_buffer = NULL;
+		free(tmp_buffer[fd]);
+		tmp_buffer[fd] = NULL;
 		return (NULL);
 	}
-	nl_pos = get_new_line(tmp_buffer);
-	line = get_line(tmp_buffer, nl_pos);
-	tmp_buffer = save_remainder_buffer(tmp_buffer, nl_pos);
+	nl_pos = get_new_line(tmp_buffer[fd]);
+	line = get_line(tmp_buffer[fd], nl_pos);
+	tmp_buffer[fd] = save_remainder_buffer(tmp_buffer[fd], nl_pos);
 	return (line);
 }
