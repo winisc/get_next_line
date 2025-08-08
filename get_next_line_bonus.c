@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wini <wini@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: wsilveir <wsilveir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 19:51:15 by wsilveir          #+#    #+#             */
-/*   Updated: 2025/08/07 02:59:42 by wini             ###   ########.fr       */
+/*   Updated: 2025/08/08 10:27:13 by wsilveir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-static int	get_new_line(char *tmp_buffer)
+int	get_new_line(char *tmp_buffer)
 {
 	int	i;
 
@@ -26,7 +26,7 @@ static int	get_new_line(char *tmp_buffer)
 	return (-1);
 }
 
-static char	*read_buffer_nl(int fd, char *tmp_buffer)
+char	*read_buffer_nl(int fd, char *tmp_buffer)
 {
 	char	*rd_buffer;
 	char	*tmp_storage;
@@ -54,7 +54,7 @@ static char	*read_buffer_nl(int fd, char *tmp_buffer)
 	return (tmp_buffer);
 }
 
-static char	*get_line(char *tmp_buffer, int nl_index)
+char	*get_line(char *tmp_buffer, int nl_index)
 {
 	char	*nl_buffer;
 
@@ -67,7 +67,7 @@ static char	*get_line(char *tmp_buffer, int nl_index)
 	return (nl_buffer);
 }
 
-static char	*save_remainder_buffer(char *tmp_buffer, int nl_index)
+char	*save_remainder_buffer(char *tmp_buffer, int nl_index)
 {
 	char	*str_remainder;
 	int		len;
