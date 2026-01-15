@@ -43,7 +43,7 @@ char	*read_buffer_nl(int fd, char *tmp_buffer)
 		if (rd_bytes == 0)
 			break ;
 		if (rd_bytes == -1)
-			return (ft_read_error(rd_buffer, tmp_buffer));
+			return (read_error(rd_buffer, tmp_buffer));
 		rd_buffer[rd_bytes] = 0;
 		tmp_storage = ft_strjoin(tmp_buffer, rd_buffer);
 		free(tmp_buffer);

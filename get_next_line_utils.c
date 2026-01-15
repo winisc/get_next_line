@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-char	*ft_read_error(char *buf, char *tmp_buf)
+char	*read_error(char *buf, char *tmp_buf)
 {
 	free(buf);
 	free(tmp_buf);
